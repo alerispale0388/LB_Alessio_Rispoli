@@ -70,7 +70,7 @@ const createUser = (e) => {
     }).then((result) => {
         result.json().then((user) => {
             users.push(user);
-            renderUser();
+            indexUser();
         });
     });
 };

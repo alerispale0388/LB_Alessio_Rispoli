@@ -18,6 +18,12 @@ public class UserService {
 
     @Transactional
     public User createUser(User user) {
+        List<User> allUser = findAll();
+        for (User value : allUser) {
+            if (value.getEmail().equals(user.getEmail())) {
+                user.setId(value.getId());
+            }
+        }
         entityManager.merge(user);
         return user;
     }
