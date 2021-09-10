@@ -1,11 +1,9 @@
 package ch.zli.m223.punchclock.domain;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.HashMap;
 
+@Entity
 public class User {
 
     @Id
@@ -16,7 +14,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private HashMap password;
+    private String password;
 
     public Long getId() {
         return id;
@@ -34,7 +32,7 @@ public class User {
         this.email = email;
     }
 
-    public HashMap getPassword() {
+    public String getPassword() {
         return password;
     }
 }

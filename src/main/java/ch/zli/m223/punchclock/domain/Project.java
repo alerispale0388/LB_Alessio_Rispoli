@@ -1,14 +1,10 @@
 package ch.zli.m223.punchclock.domain;
 
-import jdk.dynalink.linker.LinkerServices;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.HashMap;
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +13,30 @@ public class Project {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+   @OneToMany
     private List<Activity> activities;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
 }

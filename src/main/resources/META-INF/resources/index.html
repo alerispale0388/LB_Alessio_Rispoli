@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -10,6 +10,25 @@
     <script src="script.js" type="application/javascript"></script>
 </head>
 <body>
+<div id="loginPage">
+<h3>Registration</h3>
+<form id="registration">
+    <label for="email">E-Mail</label>
+    <input type="text" name="email" id="email" required>
+    <label for="password">Password</label>
+    <input type="text" name="password" id="password" required>
+    <input type="submit" value="Registration" />
+</form>
+<h3>Login</h3>
+<form id="login">
+    <label for="loginEmail">E-Mail</label>
+    <input type="text" name="loginEmail" id="loginEmail" required>
+    <label for="loginPassword">Password</label>
+    <input type="password" name="loginPassword" id="loginPassword" required>
+    <input type="submit" value="Login" />
+</form>
+</div>
+<div id="mainPage">
 <h3>Create Entry</h3>
 <form id="createEntryForm">
     <label for="checkIn">Check in</label>
@@ -38,6 +57,10 @@
         <th>ID</th>
         <th>Check in</th>
         <th>Check out</th>
+        <th>Project</th>
+        <th>Activity</th>
+        <th>User</th>
+        <th>Delete</th>
     </tr>
     </thead>
     <tbody id="entryDisplay">
@@ -46,5 +69,6 @@
     </tr>
     </tbody>
 </table>
+</div>
 </body>
 </html>

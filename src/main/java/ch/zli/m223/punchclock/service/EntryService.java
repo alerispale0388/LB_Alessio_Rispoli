@@ -7,19 +7,32 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import ch.zli.m223.punchclock.domain.Activity;
 import ch.zli.m223.punchclock.domain.Entry;
+import ch.zli.m223.punchclock.domain.Project;
+import ch.zli.m223.punchclock.domain.User;
 
 @ApplicationScoped
 public class EntryService {
     @Inject
     EntityManager entityManager;
 
+    @Inject
+    ProjectService projectService;
+
+    @Inject
+    UserService userService;
+
     public EntryService() {
     }
 
     @Transactional
     public Entry createEntry(Entry entry) {
-        entityManager.persist(entry);
+        Project project = projectService.getProjectById(entry.getProject().getId());
+        entry.setProject(project);
+        User user = userService.getUserById(entry.getUser().getId());
+        entry.setUser(user);
+        entityManager.merge(entry);
         return entry;
     }
 
@@ -39,7 +52,12 @@ public class EntryService {
 
     @Transactional
     public Entry getEntryById(Long id){
-        return entityManager.find(Entry.class, id);
+        Entry entry = entityManager.find(Entry.class, id);
+        Project project = projectService.getProjectById(entry.getProject().getId());
+        entry.setProject(project);
+        User user = userService.getUserById(entry.getUser().getId());
+        entry.setUser(user);
+        return entry;
     };
 
     @Transactional

@@ -1,13 +1,14 @@
 package ch.zli.m223.punchclock.service;
 
 import ch.zli.m223.punchclock.domain.Activity;
-import ch.zli.m223.punchclock.domain.Entry;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@ApplicationScoped
 public class ActivityService {
     @Inject
     EntityManager entityManager;
@@ -17,7 +18,7 @@ public class ActivityService {
 
     @Transactional
     public Activity createActivity(Activity activity) {
-        entityManager.persist(activity);
+        entityManager.merge(activity);
         return activity;
     }
 
@@ -43,4 +44,13 @@ public class ActivityService {
     public void update(Activity activity){
         entityManager.merge(activity);
     }
+
+    @Transactional
+    public List<Activity> findAllActivitiesWithProjectId(Long project_id){
+        var query = entityManager.createQuery("FROM Activity WHERE project_id = :project_id");
+        query.setParameter("project_id", project_id);
+        return query.getResultList();
+    }
+
+
 }

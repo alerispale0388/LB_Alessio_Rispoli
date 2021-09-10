@@ -2,14 +2,17 @@ package ch.zli.m223.punchclock.controller;
 
 import ch.zli.m223.punchclock.domain.User;
 import ch.zli.m223.punchclock.service.UserService;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/user")
+@Tag(name="User")
 public class UserController {
 
     @Inject
@@ -24,8 +27,8 @@ public class UserController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public User add(User entry) {
-        return userService.createUser(entry);
+    public User add(User user) {
+        return userService.createUser(user);
     }
 
     @DELETE

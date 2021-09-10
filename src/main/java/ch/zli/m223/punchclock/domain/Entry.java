@@ -17,11 +17,10 @@ public class Entry {
     private LocalDateTime checkOut;
 
     @ManyToOne
-    @JoinColumn(name = "id")
-    private Project project_id;
+    private Project project;
 
-    @OneToOne
-    private User user_id;
+    @ManyToOne
+    private User user;
 
     public Long getId() {
         return id;
@@ -47,5 +46,19 @@ public class Entry {
         this.checkOut = checkOut;
     }
 
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }

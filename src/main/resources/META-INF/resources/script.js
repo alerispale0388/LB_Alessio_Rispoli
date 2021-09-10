@@ -1,8 +1,53 @@
 const URL = 'http://localhost:8080';
 let entries = [];
+let showOrHide = 0;
 
 const dateAndTimeToDate = (dateString, timeString) => {
     return new Date(`${dateString}T${timeString}`).toISOString();
+};
+
+const registration = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const user = {};
+    user['email'] = formData.get('email');
+    user['password'] = formData.get('password');
+
+    fetch(`${URL}/auth/registration`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    }).then((result) => {
+        result.json().then((user) => {
+            entries.push(user);
+            renderEntries();
+        });
+    });
+};
+
+const login = (e) => {
+    e.preventDefault();
+    showMainPage();
+    const formData = new FormData(e.target);
+    const loginViewModel = {};
+    loginViewModel['email'] = formData.get('loginEmail');
+    loginViewModel['password'] = formData.get('loginPassword');
+
+    fetch(`${URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginViewModel)
+    }).then((response)=> {
+        response.json().then((loginViewModel) =>{
+            entries.push(loginViewModel);
+            console.log(response);
+            renderEntries();
+        });
+    });
 };
 
 const createEntry = (e) => {
@@ -86,10 +131,24 @@ const renderEntries = () => {
         row.appendChild(createCell(entry.id));
         row.appendChild(createCell(new Date(entry.checkIn).toLocaleString()));
         row.appendChild(createCell(new Date(entry.checkOut).toLocaleString()));
+        row.appendChild(createCell(entry.project.name));
+        row.appendChild(createCell(entry.project.activities.name));
+        row.appendChild(createCell(entry.user.email));
         row.appendChild(button)
         display.appendChild(row);
     });
 };
+
+function showLogin() {
+    document.getElementById("loginPage").style.display = 'block';
+    document.getElementById("mainPage").style.display = 'none';
+}
+
+function showMainPage() {
+    document.getElementById("loginPage").style.display = 'none';
+    document.getElementById("mainPage").style.display = 'block';
+}
+
 
 document.addEventListener('DOMContentLoaded', function(){
     const createEntryForm = document.querySelector('#createEntryForm');
@@ -100,5 +159,17 @@ document.addEventListener('DOMContentLoaded', function(){
 document.addEventListener('DOMContentLoaded', function(){
     const createEntryForm = document.querySelector('#updateEntryForm');
     createEntryForm.addEventListener('submit',updateEntry );
+    indexEntries();
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+    const createEntryForm = document.querySelector('#registration');
+    createEntryForm.addEventListener('submit',registration );
+    indexEntries();
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+    const createEntryForm = document.querySelector('#login');
+    createEntryForm.addEventListener('submit',login );
     indexEntries();
 });

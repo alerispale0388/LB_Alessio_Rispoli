@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.POST;
@@ -11,6 +12,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import ch.zli.m223.punchclock.domain.User;
+import ch.zli.m223.punchclock.service.UserService;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -25,23 +28,37 @@ import io.smallrye.jwt.build.Jwt;
 @Tag(name = "Authorization", description = "Sample to manage Authorization")
 @Path("/auth")
 public class AuthentificationController {
-    
+
+    @Inject
+    UserService userService;
+
     @POST
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public LoginResultViewModel login(LoginViewModel loginViewModel){
-        if(loginViewModel.getUsername().equals("user") && loginViewModel.getPassword().equals("secure")){
+
+        User user = userService.getLoginUser(loginViewModel.getEmail(), loginViewModel.getPassword());
+
+        if(loginViewModel.getEmail().equals(user.getEmail()) && loginViewModel.getPassword().equals(user.getPassword())){
             String token =
             Jwt.issuer("https://zli.ch/issuer") 
               .upn("user@zli.ch") 
-              .groups(new HashSet<>(Arrays.asList("User", "Admin"))) 
+              .groups(new HashSet<>(Arrays.asList("User")))
               .claim(Claims.birthdate.name(), "2001-07-13")
               .expiresIn(Duration.ofHours(1)) 
             .sign();
             return new LoginResultViewModel(token);
         }
-        throw new NotAuthorizedException("User ["+loginViewModel.getUsername()+"] not known");
+        throw new NotAuthorizedException("User ["+loginViewModel.getEmail()+"] not known");
+    }
+
+    @POST
+    @Path("/registration")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public User createUser(User user) {
+        return userService.createUser(user);
     }
 }
 
