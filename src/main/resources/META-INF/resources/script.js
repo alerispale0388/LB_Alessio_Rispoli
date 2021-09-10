@@ -103,6 +103,7 @@ function deleteUser(id) {
         }
     }).then(() => {
         indexUser();
+        indexSpecialUser();
     })
 }
 
@@ -200,7 +201,7 @@ const indexSpecialUser = () => {
     }).then((result) => {
         result.json().then((result) => {
             specialUser = result;
-            renderActivity();
+            renderSpecialUser();
         });
     });
     renderSpecialUser();
@@ -246,14 +247,14 @@ const renderActivity = () => {
 };
 
 const renderSpecialUser = () => {
-    const displaySpecialUser = document.querySelector('#activityDisplay');
+    const displaySpecialUser = document.querySelector('#specialUser');
     displaySpecialUser.innerHTML = '';
     specialUser.forEach((specialUser) => {
         const row = document.createElement('tr');
         const button = document.createElement('button');
         button.innerHTML = "Delete";
         button.id = specialUser.id;
-        button.onclick = function () { deleteActivity(this.id) };
+        button.onclick = function () { deleteUser(this.id) };
         row.appendChild(createCell(specialUser.id))
         row.appendChild(createCell(specialUser.email));
         row.appendChild(button)

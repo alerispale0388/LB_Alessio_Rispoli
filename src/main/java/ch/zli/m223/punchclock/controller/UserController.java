@@ -30,8 +30,8 @@ public class UserController {
     }
 
     /**
-     * Get users with email longer than 10
-     * @return Returns all user with email longer than 10 in DB
+     * Get users with id greater than 5
+     * @return Returns all user with greater than 5 in DB
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)

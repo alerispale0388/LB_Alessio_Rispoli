@@ -30,7 +30,9 @@ public class UserService {
 
     @SuppressWarnings("unchecked")
     public List<User> findSpecialUser() {
-        var query = entityManager.createQuery("FROM User HAVING LENGTH(email) > 10");
+        var query = entityManager.createQuery("FROM User user " +
+                "GROUP BY user.id " +
+                "HAVING (user.id) > 5");
         return query.getResultList();
     }
 
