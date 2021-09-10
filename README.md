@@ -25,7 +25,10 @@ hat, kann man sich neue registrieren. Nach der Registration kann man sich einlog
 eingeloggt ist, können die Funktionen benutzt werden. Wenn man sich ausloggt, muss man sich
 beim nächsten mal wie üblich neu anmelden, da der Token verloren geht. 
 
+Die Testdaten sind im import.sql zu finden.
+
 
 # Abweichung zur Dokumentation
 
 1. In der Entity Entry, sind die User und Projects als Objekte und nicht als id angegeben.
+2. Es können keine Entries mit User und Projects erstellt werden.
