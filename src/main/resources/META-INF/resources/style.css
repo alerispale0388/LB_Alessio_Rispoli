@@ -11,3 +11,29 @@ input[type='submit'], table {
 table {
     width: 40rem;
 }
+
+#logout {
+    background-color: red;
+    color: white;
+    border-radius: 2px;
+    border-color: red;
+}
+
+#createUser, #createActivity {
+    background-color: #00ff00;
+    border-radius: 2px;
+    border-color: #00ff00;
+}
+
+#updateActivity, #updateUser {
+    background-color: yellow;
+    border-radius: 2px;
+    border-color: yellow;
+}
+
+button {
+    background-color: red;
+    color: white;
+    border-radius: 2px;
+    border-color: red;
+}

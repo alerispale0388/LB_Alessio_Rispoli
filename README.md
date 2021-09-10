@@ -23,3 +23,9 @@ auch für Activities machen. Man muss für dies jedoch angemeldet sein. Wenn man
 hat, kann man sich neue registrieren. Nach der Registration kann man sich einlogen. Wenn man
 eingeloggt ist, können die Funktionen benutzt werden. Wenn man sich ausloggt, muss man sich
 beim nächsten mal wie üblich neu anmelden, da der Token verloren geht. 
+
+
+# Abweichung zur Dokumentation
+
+1. In der Entity Entry, sind die User und Projects als Objekte und nicht als id angegeben.
+2. 

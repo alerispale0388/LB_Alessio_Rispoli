@@ -13,14 +13,15 @@ import java.util.List;
 
 @Path("/activities")
 @Tag(name="Activity", description = "Manage Activities")
+@RolesAllowed({"User"})
 public class ActivityController {
-
 
     @Inject
     ActivityService activityService;
 
     /**
      * Get all activities
+     * @return Returns all activities in DB
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -30,6 +31,7 @@ public class ActivityController {
 
     /**
      * Create or update an activity
+     * @return Returns created or updated activity
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,6 +42,7 @@ public class ActivityController {
 
     /**
      * Delete specified Activity
+     * @param id delete specified activity
      */
     @DELETE
     @Path("/{id}")
@@ -49,6 +52,8 @@ public class ActivityController {
 
     /**
      * Get specified Activity
+     * @param id get specified project
+     * @return Returns the specified project
      */
     @GET
     @Path("/{id}")

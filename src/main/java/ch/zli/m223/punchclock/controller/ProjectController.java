@@ -14,7 +14,7 @@ import java.util.List;
 
 @Path("/projects")
 @Tag(name="Project", description = "Manage Projects")
-@RolesAllowed("User")
+@RolesAllowed({"User"})
 public class ProjectController {
 
     @Inject
@@ -22,6 +22,7 @@ public class ProjectController {
 
     /**
      * Get projects
+     * @return Returns all projects in DB
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -31,6 +32,7 @@ public class ProjectController {
 
     /**
      * Create or Update a project
+     * @return Returns created or updated project
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +43,7 @@ public class ProjectController {
 
     /**
      * Delete specified project
+     * @param id delete specified project
      */
     @DELETE
     @Path("/{id}")
@@ -50,6 +53,8 @@ public class ProjectController {
 
     /**
      * Get specified project
+     * @param id get specified project
+     * @return Returns the specified project
      */
     @GET
     @Path("/{id}")

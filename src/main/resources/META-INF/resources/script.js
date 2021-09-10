@@ -1,6 +1,7 @@
 const URL = 'http://localhost:8080';
 let users = [];
 let activities = [];
+let specialUser = [];
 
 const registration = (e) => {
     e.preventDefault();
@@ -24,28 +25,33 @@ const registration = (e) => {
     });
 };
 
-const login = (e) => {
+const login = async (e) => {
     e.preventDefault();
-    showMainPage();
     const formData = new FormData(e.target);
     const loginViewModel = {};
     loginViewModel['email'] = formData.get('loginEmail');
     loginViewModel['password'] = formData.get('loginPassword');
 
-    fetch(`${URL}/auth/login`, {
+    const response = await fetch(`${URL}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(loginViewModel)
-    }).then((response)=> {
-        response.json().then((loginViewModel) =>{
-            users.push(loginViewModel);
-            console.log(response);
-            renderUser();
-        });
-    });
+    })
+    let jwt = await response.json();
+    if (jwt != null) {
+       await localStorage.setItem('token', jwt.token);
+        hideOrShowLogin();
+    } else {
+
+    }
 };
+
+function logout() {
+    localStorage.clear();
+}
+
 
 const createUser = (e) => {
     e.preventDefault();
@@ -57,7 +63,8 @@ const createUser = (e) => {
     fetch(`${URL}/user`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(user)
     }).then((result) => {
@@ -79,7 +86,8 @@ const updateUser = (e) => {
     fetch(`${URL}/user`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(user)
     }).then(() => {
@@ -90,14 +98,20 @@ const updateUser = (e) => {
 function deleteUser(id) {
     fetch( `${URL}/user/${id}`, {
         method: 'DELETE',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
     }).then(() => {
         indexUser();
     })
 }
 
-const indexUser = () => {
-    fetch(`${URL}/user`, {
-        method: 'GET'
+const indexUser = async () => {
+    await fetch(`${URL}/user`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
     }).then((result) => {
         result.json().then((result) => {
             users = result;
@@ -117,13 +131,14 @@ const createActivity = (e) => {
     fetch(`${URL}/activities`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(activity)
     }).then((result) => {
         result.json().then((activity) => {
             activities.push(activity);
-            renderActivity();
+            indexActivity();
         });
     });
 };
@@ -141,7 +156,8 @@ const updateActivity = (e) => {
     fetch(`${URL}/activities`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(activity)
     }).then(() => {
@@ -152,6 +168,9 @@ const updateActivity = (e) => {
 function deleteActivity(id) {
     fetch( `${URL}/activities/${id}`, {
         method: 'DELETE',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
     }).then(() => {
         indexActivity();
     })
@@ -159,14 +178,32 @@ function deleteActivity(id) {
 
 const indexActivity = () => {
     fetch(`${URL}/activities`, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
     }).then((result) => {
         result.json().then((result) => {
-            users = result;
+            activities = result;
             renderActivity();
         });
     });
     renderActivity();
+};
+
+const indexSpecialUser = () => {
+    fetch(`${URL}/user/special`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    }).then((result) => {
+        result.json().then((result) => {
+            specialUser = result;
+            renderActivity();
+        });
+    });
+    renderSpecialUser();
 };
 
 const createCell = (text) => {
@@ -194,7 +231,7 @@ const renderUser = () => {
 const renderActivity = () => {
     const displayActivity = document.querySelector('#activityDisplay');
     displayActivity.innerHTML = '';
-    users.forEach((activity) => {
+    activities.forEach((activity) => {
         const row = document.createElement('tr');
         const button = document.createElement('button');
         button.innerHTML = "Delete";
@@ -208,50 +245,62 @@ const renderActivity = () => {
     });
 };
 
-/*
-function showLogin() {
-    document.getElementById("loginPage").style.display = 'block';
-    document.getElementById("mainPage").style.display = 'none';
-}
-*/
+const renderSpecialUser = () => {
+    const displaySpecialUser = document.querySelector('#activityDisplay');
+    displaySpecialUser.innerHTML = '';
+    specialUser.forEach((specialUser) => {
+        const row = document.createElement('tr');
+        const button = document.createElement('button');
+        button.innerHTML = "Delete";
+        button.id = specialUser.id;
+        button.onclick = function () { deleteActivity(this.id) };
+        row.appendChild(createCell(specialUser.id))
+        row.appendChild(createCell(specialUser.email));
+        row.appendChild(button)
+        displaySpecialUser.appendChild(row);
+    });
+};
 
-function showMainPage() {
-    document.getElementById("loginPage").style.display = 'none';
-    document.getElementById("mainPage").style.display = 'block';
+function hideOrShowLogin() {
+    if (localStorage.getItem('token') != null) {
+        document.getElementById("loginPage").style.display = 'none';
+        document.getElementById("mainPage").style.display = 'block';
+        indexUser();
+        indexActivity();
+        indexSpecialUser();
+
+    } else {
+        document.getElementById("loginPage").style.display = 'block';
+        document.getElementById("mainPage").style.display = 'none';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function(){
     const createUserForm = document.querySelector('#createUserForm');
     createUserForm.addEventListener('submit', createUser);
-    indexUser();
-});
 
-document.addEventListener('DOMContentLoaded', function(){
     const updateUserForm = document.querySelector('#updateUserForm');
     updateUserForm.addEventListener('submit',updateUser );
-    indexUser();
-});
 
-document.addEventListener('DOMContentLoaded', function(){
     const createActivityForm = document.querySelector('#createActivityForm');
     createActivityForm.addEventListener('submit', createActivity);
-    indexActivity();
-});
 
-document.addEventListener('DOMContentLoaded', function(){
     const updateActivityForm = document.querySelector('#updateActivityForm');
     updateActivityForm.addEventListener('submit',updateActivity );
-    indexActivity();
-});
 
-document.addEventListener('DOMContentLoaded', function(){
     const createRegistration = document.querySelector('#registration');
     createRegistration.addEventListener('submit',registration );
-    indexUser();
-});
 
-document.addEventListener('DOMContentLoaded', function(){
     const createEntryForm = document.querySelector('#login');
     createEntryForm.addEventListener('submit',login );
+    hideOrShowLogin();
     indexUser();
+    indexActivity();
+
+    const createLogout = document.querySelector('#buttonForLogout');
+    createLogout.addEventListener('submit',logout );
+    indexUser();
+    indexActivity();
+    indexSpecialUser();
+    hideOrShowLogin();
 });

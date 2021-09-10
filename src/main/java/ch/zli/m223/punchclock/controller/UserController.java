@@ -13,6 +13,7 @@ import java.util.List;
 
 @Path("/user")
 @Tag(name="User", description = "Manage User")
+@RolesAllowed({"User"})
 public class UserController {
 
     @Inject
@@ -20,6 +21,7 @@ public class UserController {
 
     /**
      * Get users
+     * @return Returns all user in DB
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -28,7 +30,19 @@ public class UserController {
     }
 
     /**
+     * Get users with email longer than 10
+     * @return Returns all user with email longer than 10 in DB
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/special")
+    public List<User> specialList() {
+        return userService.findSpecialUser();
+    }
+
+    /**
      * Create or Update a user
+     * @return Returns created or updated user
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,6 +53,7 @@ public class UserController {
 
     /**
      * Delete specified user
+     * @param id delete specified user
      */
     @DELETE
     @Path("/{id}")
@@ -48,6 +63,8 @@ public class UserController {
 
     /**
      * Get specified user
+     * @param id get specified user
+     * @return Returns the specified user
      */
     @GET
     @Path("/{id}")

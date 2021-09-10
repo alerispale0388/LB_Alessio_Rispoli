@@ -28,6 +28,12 @@ public class UserService {
         return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<User> findSpecialUser() {
+        var query = entityManager.createQuery("FROM User HAVING LENGTH(email) > 10");
+        return query.getResultList();
+    }
+
     @Transactional
     public void deleteUser(Long id){
         User removeUser = getUserById(id);

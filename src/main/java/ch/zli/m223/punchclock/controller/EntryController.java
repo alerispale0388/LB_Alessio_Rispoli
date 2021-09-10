@@ -16,7 +16,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Path("/entries")
 @Tag(name="Entry", description = "Manage Entries")
-@RolesAllowed("User")
+@RolesAllowed({"User"})
 public class EntryController {
 
     @Inject
@@ -24,6 +24,7 @@ public class EntryController {
 
     /**
      * Get entries
+     * @return Returns all entries in DB
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,6 +34,7 @@ public class EntryController {
 
     /**
      * Create or Update an entry
+     * @return Returns created or updated entry
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -43,6 +45,7 @@ public class EntryController {
 
     /**
      * Delete specified entry
+     * @param id delete specified entry
      */
     @DELETE
     @Path("/{id}")
@@ -52,6 +55,8 @@ public class EntryController {
 
     /**
      * Get specified entry
+     * @param id get specified entry
+     * @return Returns the specified entry
      */
     @GET
     @Path("/{id}")

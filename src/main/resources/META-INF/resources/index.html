@@ -29,13 +29,17 @@
 </form>
 </div>
 <div id="mainPage">
+    <form id="buttonForLogout">
+        <label for="logout"></label>
+        <input type="submit" name="logout" id="logout" value="LogOut" required>
+    </form>
 <h3>Create User</h3>
 <form id="createUserForm">
     <label for="email">E-Mail</label>
     <input type="text" name="email" id="email" required>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
-    <input type="submit" value="Save" />
+    <input type="submit" value="Save" id="createUser" />
 </form>
 <h3>Update User</h3>
 <form id="updateUserForm">
@@ -45,8 +49,9 @@
     <input type="text" name="emailUpdate" id="emailUpdate" required>
     <label for="passwordUpdate">Password</label>
     <input type="password" name="passwordUpdate" id="passwordUpdate" required>
-    <input type="submit" value="Update">
+    <input type="submit" value="Update" id="updateUser">
 </form>
+    <h3>User</h3>
 <table>
     <thead>
     <tr>
@@ -69,7 +74,7 @@
         <input type="text" name="name" id="name" required>
         <label for="projectId">Project ID</label>
         <input type="number" name="projectId" id="projectId" required>
-        <input type="submit" value="Create Activity" />
+        <input type="submit" value="Create Activity" id="createActivity"/>
     </form>
     <h3>Update Activity</h3>
     <form id="updateActivityForm">
@@ -79,14 +84,16 @@
         <input type="text" name="nameUpdate" id="nameUpdate" required>
         <label for="projectIdUpdate">Project ID</label>
         <input type="number" name="projectIdUpdate" id="projectIdUpdate" required>
-        <input type="submit" value="Update">
+        <input type="submit" value="Update" id="updateActivity">
     </form>
+    <h3>Activities</h3>
     <table>
         <thead>
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Project ID</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody id="activityDisplay">
@@ -96,6 +103,21 @@
         </tbody>
     </table>
 
+    <h3>Special User</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>E-Mail</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody id="specialUser">
+        <tr>
+            <td colspan="3">Loading...</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
