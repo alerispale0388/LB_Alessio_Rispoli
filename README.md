@@ -13,5 +13,13 @@ Folgende Schritte sind notwendig um die Applikation zu erstellen und zu starten:
 Folgende Dienste stehen während der Ausführung im Profil dev zur Verfügung:
 
 REST-Schnittstelle der Applikation: http://localhost:8080/entries/
-
 Swagger API: http://localhost:8080/q/swagger-ui/
+
+
+# Was kann die Applikation
+
+In der Applikation kann man User bearbeiten, erstellen und entfernen. Das Gleiche kann man
+auch für Activities machen. Man muss für dies jedoch angemeldet sein. Wenn man noch kein Login
+hat, kann man sich neue registrieren. Nach der Registration kann man sich einlogen. Wenn man
+eingeloggt ist, können die Funktionen benutzt werden. Wenn man sich ausloggt, muss man sich
+beim nächsten mal wie üblich neu anmelden, da der Token verloren geht. 
