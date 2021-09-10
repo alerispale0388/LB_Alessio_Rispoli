@@ -13,43 +13,48 @@ import java.util.List;
 
 
 @Path("/projects")
-@Tag(name="Project")
+@Tag(name="Project", description = "Manage Projects")
 @RolesAllowed("User")
 public class ProjectController {
 
     @Inject
     ProjectService projectService;
 
+    /**
+     * Get projects
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Project> list() {
         return projectService.findAll();
     }
 
+    /**
+     * Create or Update a project
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Project add(Project project) {
+    public Project createOrUpdate(Project project) {
         return projectService.createProject(project);
     }
 
+    /**
+     * Delete specified project
+     */
     @DELETE
     @Path("/{id}")
-    public void delete(@PathParam Long id){
+    public void deleteSpecified(@PathParam Long id){
         projectService.deleteEntry(id);
     }
 
+    /**
+     * Get specified project
+     */
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Project getSingleEntry(@PathParam Long id){
+    public Project getSingleProject(@PathParam Long id){
         return projectService.getProjectById(id);
     };
-
-    @PUT
-    public void update(Project project){
-        projectService.update(project);
-    }
-
-
 }

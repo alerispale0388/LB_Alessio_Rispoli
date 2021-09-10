@@ -15,42 +15,48 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Path("/entries")
-@Tag(name="Entry")
+@Tag(name="Entry", description = "Manage Entries")
 @RolesAllowed("User")
 public class EntryController {
 
     @Inject
     EntryService entryService;
 
+    /**
+     * Get entries
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Entry> list() {
         return entryService.findAll();
     }
 
+    /**
+     * Create or Update an entry
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Entry add(Entry entry) {
+    public Entry createOrUpdate(Entry entry) {
         return entryService.createEntry(entry);
     }
 
+    /**
+     * Delete specified entry
+     */
     @DELETE
     @Path("/{id}")
-    public void delete(@PathParam Long id){
+    public void deleteSpecified(@PathParam Long id){
         entryService.deleteEntry(id);
     }
 
+    /**
+     * Get specified entry
+     */
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Entry getSingleEntry(@PathParam Long id){
         return entryService.getEntryById(id);
     };
-
-    @PUT
-    public void update(Entry entry){
-        entryService.update(entry);
-    }
-
 }

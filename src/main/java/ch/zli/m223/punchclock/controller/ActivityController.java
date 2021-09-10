@@ -12,42 +12,49 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/activities")
-@Tag(name="Activity")
+@Tag(name="Activity", description = "Manage Activities")
 public class ActivityController {
 
 
     @Inject
     ActivityService activityService;
 
+    /**
+     * Get all activities
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Activity> list() {
         return activityService.findAll();
     }
 
+    /**
+     * Create or update an activity
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Activity add(Activity activity) {
+    public Activity createOrUpdate(Activity activity) {
         return activityService.createActivity(activity);
     }
 
+    /**
+     * Delete specified Activity
+     */
     @DELETE
     @Path("/{id}")
-    public void delete(@PathParam Long id){
+    public void deleteWithId(@PathParam Long id){
         activityService.deleteActivity(id);
     }
 
+    /**
+     * Get specified Activity
+     */
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Activity getSingleEntry(@PathParam Long id){
+    public Activity getSingleActivity(@PathParam Long id){
         return activityService.getActivityById(id);
     };
-
-    @PUT
-    public void update(Activity activity){
-        activityService.update(activity);
-    }
 
 }
