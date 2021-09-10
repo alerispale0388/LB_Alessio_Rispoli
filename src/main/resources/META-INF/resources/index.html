@@ -13,10 +13,10 @@
 <div id="loginPage">
 <h3>Registration</h3>
 <form id="registration">
-    <label for="email">E-Mail</label>
-    <input type="text" name="email" id="email" required>
-    <label for="password">Password</label>
-    <input type="text" name="password" id="password" required>
+    <label for="registrationEmail">E-Mail</label>
+    <input type="text" name="registrationEmail" id="registrationEmail" required>
+    <label for="registrationPassword">Password</label>
+    <input type="password" name="registrationPassword" id="registrationPassword" required>
     <input type="submit" value="Registration" />
 </form>
 <h3>Login</h3>
@@ -29,37 +29,29 @@
 </form>
 </div>
 <div id="mainPage">
-<h3>Create Entry</h3>
-<form id="createEntryForm">
-    <label for="checkIn">Check in</label>
-    <input type="date" name="checkInDate" id="checkIn" required>
-    <input type="time" name="checkInTime" required>
-    <label for="checkOut">Check out</label>
-    <input type="date" name="checkOutDate" id="checkOut" required>
-    <input type="time" name="checkOutTime" required>
+<h3>Create User</h3>
+<form id="createUserForm">
+    <label for="email">E-Mail</label>
+    <input type="text" name="email" id="email" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
     <input type="submit" value="Save" />
 </form>
-<h3>Update Entry</h3>
-<form id="updateEntryForm">
+<h3>Update User</h3>
+<form id="updateUserForm">
     <label for="id">ID</label>
-    <input  type="number" name="ID" id="id" required>
-    <label for="checkIn">Check in</label>
-    <input type="date" name="checkInDateUpdate" id="checkInUpdate" required>
-    <input type="time" name="checkInTimeUpdate" required>
-    <label for="checkOut">Check out</label>
-    <input type="date" name="checkOutDateUpdate" id="checkOutUpdate" required>
-    <input type="time" name="checkOutTimeUpdate" required>
+    <input type="number" name="ID" id="id" required>
+    <label for="emailUpdate">E-Mail</label>
+    <input type="text" name="emailUpdate" id="emailUpdate" required>
+    <label for="passwordUpdate">Password</label>
+    <input type="password" name="passwordUpdate" id="passwordUpdate" required>
     <input type="submit" value="Update">
 </form>
 <table>
     <thead>
     <tr>
         <th>ID</th>
-        <th>Check in</th>
-        <th>Check out</th>
-        <th>Project</th>
-        <th>Activity</th>
-        <th>User</th>
+        <th>E-Mail</th>
         <th>Delete</th>
     </tr>
     </thead>
@@ -69,6 +61,41 @@
     </tr>
     </tbody>
 </table>
+
+
+    <h3>Create Activity</h3>
+    <form id="createActivityForm">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" required>
+        <label for="projectId">Project ID</label>
+        <input type="number" name="projectId" id="projectId" required>
+        <input type="submit" value="Create Activity" />
+    </form>
+    <h3>Update Activity</h3>
+    <form id="updateActivityForm">
+        <label for="activityId">ID</label>
+        <input type="number" name="activityId" id="activityId" required>
+        <label for="nameUpdate">Name</label>
+        <input type="text" name="nameUpdate" id="nameUpdate" required>
+        <label for="projectIdUpdate">Project ID</label>
+        <input type="number" name="projectIdUpdate" id="projectIdUpdate" required>
+        <input type="submit" value="Update">
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Project ID</th>
+        </tr>
+        </thead>
+        <tbody id="activityDisplay">
+        <tr>
+            <td colspan="3">Loading...</td>
+        </tr>
+        </tbody>
+    </table>
+
 </div>
 </body>
 </html>

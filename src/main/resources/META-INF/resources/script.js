@@ -1,18 +1,15 @@
 const URL = 'http://localhost:8080';
-let entries = [];
-let showOrHide = 0;
-
-const dateAndTimeToDate = (dateString, timeString) => {
-    return new Date(`${dateString}T${timeString}`).toISOString();
-};
+let users = [];
+let activities = [];
 
 const registration = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const user = {};
-    user['email'] = formData.get('email');
-    user['password'] = formData.get('password');
+    user['email'] = formData.get('registrationEmail');
+    user['password'] = formData.get('registrationPassword');
 
+    console.log(user.email);
     fetch(`${URL}/auth/registration`, {
         method: 'POST',
         headers: {
@@ -21,8 +18,8 @@ const registration = (e) => {
         body: JSON.stringify(user)
     }).then((result) => {
         result.json().then((user) => {
-            entries.push(user);
-            renderEntries();
+            users.push(user);
+            renderUser();
         });
     });
 };
@@ -43,74 +40,133 @@ const login = (e) => {
         body: JSON.stringify(loginViewModel)
     }).then((response)=> {
         response.json().then((loginViewModel) =>{
-            entries.push(loginViewModel);
+            users.push(loginViewModel);
             console.log(response);
-            renderEntries();
+            renderUser();
         });
     });
 };
 
-const createEntry = (e) => {
+const createUser = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const entry = {};
-    entry['checkIn'] = dateAndTimeToDate(formData.get('checkInDate'), formData.get('checkInTime'));
-    entry['checkOut'] = dateAndTimeToDate(formData.get('checkOutDate'), formData.get('checkOutTime'));
+    const user = {};
+    user['email'] = formData.get('email');
+    user['password'] = formData.get('password');
 
-    fetch(`${URL}/entries`, {
+    fetch(`${URL}/user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(entry)
+        body: JSON.stringify(user)
     }).then((result) => {
-        result.json().then((entry) => {
-            entries.push(entry);
-            renderEntries();
+        result.json().then((user) => {
+            users.push(user);
+            renderUser();
         });
     });
 };
 
-function deleteEntry(id) {
 
-    console.log(id)
-
-    const response = fetch( `${URL}/entries/${id}`, {
-        method: 'DELETE',
-    }).then((result) => {
-        indexEntries();
-    })
-
-}
-
-const updateEntry = (e) => {
+const updateUser = (e) => {
     const formData = new FormData(e.target);
-    const entry = {};
-    entry['id'] = document.getElementById("id").value
-    entry['checkIn'] = dateAndTimeToDate(formData.get('checkInDateUpdate'), formData.get('checkInTimeUpdate'));
-    entry['checkOut'] = dateAndTimeToDate(formData.get('checkOutDateUpdate'), formData.get('checkOutTimeUpdate'));
+    const user = {};
+    user['id'] = document.getElementById("id").value
+    user['email'] = formData.get('emailUpdate');
+    user['password'] = formData.get('passwordUpdate');
 
-    fetch(`${URL}/entries`, {
-        method: 'PUT',
+    fetch(`${URL}/user`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(entry)
-    }).then((result) => {
-        indexEntries();
+        body: JSON.stringify(user)
+    }).then(() => {
+        indexUser();
     });
 }
 
-const indexEntries = () => {
-    fetch(`${URL}/entries`, {
+function deleteUser(id) {
+    fetch( `${URL}/user/${id}`, {
+        method: 'DELETE',
+    }).then(() => {
+        indexUser();
+    })
+}
+
+const indexUser = () => {
+    fetch(`${URL}/user`, {
         method: 'GET'
     }).then((result) => {
         result.json().then((result) => {
-            entries = result;
-            renderEntries();
+            users = result;
+            renderUser();
         });
     });
-    renderEntries();
+    renderUser();
+};
+
+const createActivity = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const activity = {};
+    activity['name'] = formData.get('name');
+    activity['project_id'] = formData.get('projectId');
+
+    fetch(`${URL}/activities`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(activity)
+    }).then((result) => {
+        result.json().then((activity) => {
+            activities.push(activity);
+            renderActivity();
+        });
+    });
+};
+
+
+const updateActivity = (e) => {
+    const formData = new FormData(e.target);
+    const activity = {};
+    activity['id'] = formData.get("activityId")
+    activity['name'] = formData.get('nameUpdate');
+    activity['project_id'] = formData.get('projectIdUpdate');
+
+    console.log(activity)
+
+    fetch(`${URL}/activities`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(activity)
+    }).then(() => {
+        indexActivity();
+    });
+}
+
+function deleteActivity(id) {
+    fetch( `${URL}/activities/${id}`, {
+        method: 'DELETE',
+    }).then(() => {
+        indexActivity();
+    })
+}
+
+const indexActivity = () => {
+    fetch(`${URL}/activities`, {
+        method: 'GET'
+    }).then((result) => {
+        result.json().then((result) => {
+            users = result;
+            renderActivity();
+        });
+    });
+    renderActivity();
 };
 
 const createCell = (text) => {
@@ -119,57 +175,83 @@ const createCell = (text) => {
     return cell;
 };
 
-const renderEntries = () => {
+const renderUser = () => {
     const display = document.querySelector('#entryDisplay');
     display.innerHTML = '';
-    entries.forEach((entry) => {
+    users.forEach((user) => {
         const row = document.createElement('tr');
         const button = document.createElement('button');
         button.innerHTML = "Delete";
-        button.id = entry.id;
-        button.onclick = function () { deleteEntry(this.id) };
-        row.appendChild(createCell(entry.id));
-        row.appendChild(createCell(new Date(entry.checkIn).toLocaleString()));
-        row.appendChild(createCell(new Date(entry.checkOut).toLocaleString()));
-        row.appendChild(createCell(entry.project.name));
-        row.appendChild(createCell(entry.project.activities.name));
-        row.appendChild(createCell(entry.user.email));
+        button.id = user.id;
+        button.onclick = function () { deleteUser(this.id) };
+        row.appendChild(createCell(user.id));
+        row.appendChild(createCell(user.email));
         row.appendChild(button)
         display.appendChild(row);
     });
 };
 
+const renderActivity = () => {
+    const displayActivity = document.querySelector('#activityDisplay');
+    displayActivity.innerHTML = '';
+    users.forEach((activity) => {
+        const row = document.createElement('tr');
+        const button = document.createElement('button');
+        button.innerHTML = "Delete";
+        button.id = activity.id;
+        button.onclick = function () { deleteActivity(this.id) };
+        row.appendChild(createCell(activity.id))
+        row.appendChild(createCell(activity.name));
+        row.appendChild(createCell(activity.project_id));
+        row.appendChild(button)
+        displayActivity.appendChild(row);
+    });
+};
+
+/*
 function showLogin() {
     document.getElementById("loginPage").style.display = 'block';
     document.getElementById("mainPage").style.display = 'none';
 }
+*/
 
 function showMainPage() {
     document.getElementById("loginPage").style.display = 'none';
     document.getElementById("mainPage").style.display = 'block';
 }
 
-
 document.addEventListener('DOMContentLoaded', function(){
-    const createEntryForm = document.querySelector('#createEntryForm');
-    createEntryForm.addEventListener('submit', createEntry);
-    indexEntries();
+    const createUserForm = document.querySelector('#createUserForm');
+    createUserForm.addEventListener('submit', createUser);
+    indexUser();
 });
 
 document.addEventListener('DOMContentLoaded', function(){
-    const createEntryForm = document.querySelector('#updateEntryForm');
-    createEntryForm.addEventListener('submit',updateEntry );
-    indexEntries();
+    const updateUserForm = document.querySelector('#updateUserForm');
+    updateUserForm.addEventListener('submit',updateUser );
+    indexUser();
 });
 
 document.addEventListener('DOMContentLoaded', function(){
-    const createEntryForm = document.querySelector('#registration');
-    createEntryForm.addEventListener('submit',registration );
-    indexEntries();
+    const createActivityForm = document.querySelector('#createActivityForm');
+    createActivityForm.addEventListener('submit', createActivity);
+    indexActivity();
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+    const updateActivityForm = document.querySelector('#updateActivityForm');
+    updateActivityForm.addEventListener('submit',updateActivity );
+    indexActivity();
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+    const createRegistration = document.querySelector('#registration');
+    createRegistration.addEventListener('submit',registration );
+    indexUser();
 });
 
 document.addEventListener('DOMContentLoaded', function(){
     const createEntryForm = document.querySelector('#login');
     createEntryForm.addEventListener('submit',login );
-    indexEntries();
+    indexUser();
 });

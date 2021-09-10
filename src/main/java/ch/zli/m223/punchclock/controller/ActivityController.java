@@ -13,7 +13,6 @@ import java.util.List;
 
 @Path("/activities")
 @Tag(name="Activity")
-@RolesAllowed("User")
 public class ActivityController {
 
 
